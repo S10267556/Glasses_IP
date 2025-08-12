@@ -17,6 +17,9 @@ public class ParentDialogue : MonoBehaviour
     Transform targetTransform;
 
     [SerializeField]
+    float targetRotation;
+
+    [SerializeField]
     string currentState = "Idle";
 
     [SerializeField]
@@ -46,13 +49,17 @@ public class ParentDialogue : MonoBehaviour
 
     [SerializeField]
     float textSpeed = 0.1f;
-
-    [SerializeField]
-    int deaths = 0;
+    
+    public int deaths = 0;
 
     private int index = 0;
 
     private Coroutine currentCoroutine;
+
+    [SerializeField]
+    Vector3 moveDirection;
+
+    private Animator animator;
 
     void Awake()
     {
@@ -70,11 +77,11 @@ public class ParentDialogue : MonoBehaviour
         {
             dialogueLines = noDeathLines;
         }
-        else if (deaths == 1)
+        else if (deaths >= 1)
         {
             dialogueLines = oneDeathLines;
         }
-        else if (deaths > 3 && deaths < 5)
+        else if (deaths >= 3 && deaths < 10)
         {
             dialogueLines = someDeathLines;
         }
@@ -88,6 +95,7 @@ public class ParentDialogue : MonoBehaviour
     void Start()
     {
         StartCoroutine(currentState);
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -100,12 +108,36 @@ public class ParentDialogue : MonoBehaviour
             }
             else
             {
-                if(currentCoroutine != null)
+                if (currentCoroutine != null)
                 {
                     StopCoroutine(currentCoroutine); // Stop the current coroutine if it's running
                 }
                 dialogueText.text = dialogueLines[index]; // If clicked before the line is fully displayed, show the full line immediately
             }
+        }
+
+        if (currentState == "dialogueLoad" && targetTransform != null)
+            {
+                Vector3 lookDirection = targetTransform.position - myAgent.transform.position;
+                lookDirection.y = 0; // Only rotate on the Y axis
+                if (lookDirection != Vector3.zero)
+                    {
+                        Quaternion targetRot = Quaternion.LookRotation(lookDirection);
+                        myAgent.transform.rotation = Quaternion.Slerp(myAgent.transform.rotation, targetRot, Time.deltaTime * 5f); // Smoothly rotate
+                    }
+            }
+
+        moveDirection = myAgent.velocity;
+
+        //Animations
+        if (moveDirection == Vector3.zero)
+        {
+            //Run Idle when not moving
+            animator.SetFloat("Speed", 0);
+        }
+        else
+        {
+            animator.SetFloat("Speed", 0.5f);
         }
     }
 
@@ -235,6 +267,7 @@ public class ParentDialogue : MonoBehaviour
         {
             //If the player enters the trigger, set targetTransform to the player's transform
             targetTransform = other.transform;
+            targetRotation = other.transform.eulerAngles.y; // Store the player's rotation
         }
     }
 
