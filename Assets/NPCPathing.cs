@@ -1,4 +1,3 @@
-// File: Assets/Scripts/NPCPathing.cs
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,7 +7,9 @@ public class NPCPathing : MonoBehaviour
     private NavMeshAgent myAgent;
     [SerializeField] private Transform targetTransform;
     public string currentState;
-    public float arrivalThreshold = 0.5f; // Distance to consider target reached
+    public float arrivalThreshold = 0.5f;
+
+    private bool stoppedAtLight = false; // NEW
 
     void Awake()
     {
@@ -48,11 +49,10 @@ public class NPCPathing : MonoBehaviour
             {
                 StartCoroutine(SwitchState("Idle"));
             }
-            else
+            else if (!stoppedAtLight) // Only move if NOT stopped
             {
                 myAgent.SetDestination(targetTransform.position);
 
-                // Check if reached target
                 if (!myAgent.pathPending && myAgent.remainingDistance <= arrivalThreshold)
                 {
                     WaypointInfo info = targetTransform.GetComponent<WaypointInfo>();
@@ -63,6 +63,23 @@ public class NPCPathing : MonoBehaviour
             yield return null;
         }
     }
+
+    public void StopForLight()
+    {
+        if (myAgent != null)
+        {
+            myAgent.isStopped = true;
+        }
+    }
+
+    public void GoAfterLight()
+    {
+        if (myAgent != null)
+        {
+            myAgent.isStopped = false;
+        }
+    }
+
 
     void OnTriggerEnter(Collider other)
     {
