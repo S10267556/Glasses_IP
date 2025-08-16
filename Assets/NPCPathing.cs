@@ -9,11 +9,18 @@ public class NPCPathing : MonoBehaviour
     public string currentState;
     public float arrivalThreshold = 0.5f;
 
-    private bool stoppedAtLight = false; // NEW
+    private bool stoppedForLight = false;
+    private bool stoppedForCar = false;
 
     void Awake()
     {
         myAgent = GetComponent<NavMeshAgent>();
+    }
+
+        void Update()
+    {
+        // Decide if the car should move
+        myAgent.isStopped = stoppedForLight || stoppedForCar;
     }
 
     void Start()
@@ -49,7 +56,7 @@ public class NPCPathing : MonoBehaviour
             {
                 StartCoroutine(SwitchState("Idle"));
             }
-            else if (!stoppedAtLight) // Only move if NOT stopped
+            else if (!stoppedForLight) // Only move if NOT stopped
             {
                 myAgent.SetDestination(targetTransform.position);
 
@@ -66,20 +73,26 @@ public class NPCPathing : MonoBehaviour
 
     public void StopForLight()
     {
-        if (myAgent != null)
-        {
-            myAgent.isStopped = true;
-        }
+        stoppedForLight = true;
+        myAgent.isStopped = true;
     }
 
     public void GoAfterLight()
     {
-        if (myAgent != null)
-        {
-            myAgent.isStopped = false;
-        }
+        stoppedForLight = false;
     }
 
+    // --- Called by car sensor ---
+    public void StopForCar()
+    {
+        stoppedForCar = true;
+        myAgent.isStopped = true;
+    }
+
+    public void GoAfterCar()
+    {
+        stoppedForCar = false;
+    }
 
     void OnTriggerEnter(Collider other)
     {
