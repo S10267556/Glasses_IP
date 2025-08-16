@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class VehicleInteraction : MonoBehaviour
 {
+    [SerializeField] AudioClip enterVehicleSound;
     [SerializeField] private Transform playerCamPoint;   // Camera position when on foot
     [SerializeField] private Transform vehicleCamPoint;  // Camera position when in vehicle
     [SerializeField] private float camMoveSpeed = 5f;    // Lerp speed for camera
@@ -17,24 +18,33 @@ public class VehicleInteraction : MonoBehaviour
     private bool inVehicle = false;
     private bool transitioning = false;
 
+    private AudioSource engineSound;
+
     void Start()
     {
         mainCam = Camera.main;
         playerModel.SetActive(true);
         playerController.enabled = true;
         vehicleController.enabled = false;
+        engineSound = vehicle.GetComponent<AudioSource>();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F) && !transitioning)
         {
+            AudioSource.PlayClipAtPoint(enterVehicleSound, transform.position);
             inVehicle = !inVehicle; // Toggle state
             playerModel.SetActive(false);
             playerController.enabled = false;
             vehicleController.enabled = true;
             StopAllCoroutines();
             StartCoroutine(MoveCamera(inVehicle ? vehicleCamPoint : playerCamPoint));
+        }
+
+        if (inVehicle && engineSound.isPlaying == false)
+        {
+            PlayEngineSound();
         }
     }
 
@@ -66,5 +76,13 @@ public class VehicleInteraction : MonoBehaviour
         mainCam.transform.rotation = targetPoint.rotation;
 
         transitioning = false;
+    }
+
+    void PlayEngineSound()
+    {
+        if (inVehicle)
+        {
+            engineSound.Play();
+        }
     }
 }

@@ -7,6 +7,7 @@ public class TitleScreenCode : MonoBehaviour
     {
         // Load the specified scene when the start button is pressed
         SceneManager.LoadScene(sceneName);
+        ParentDialogue.deaths++; //Adds a death upon loading the game scene
     }
 
     public void QuitGame()

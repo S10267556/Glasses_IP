@@ -84,12 +84,16 @@ public class NPCPathing : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
+        {
             targetTransform = other.transform;
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
+        {
             targetTransform = null;
+        }
     }
 }

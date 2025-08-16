@@ -49,8 +49,8 @@ public class ParentDialogue : MonoBehaviour
 
     [SerializeField]
     float textSpeed = 0.1f;
-    
-    public int deaths = 0;
+
+    public static int deaths = 0;
 
     private int index = 0;
 
@@ -73,15 +73,17 @@ public class ParentDialogue : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (deaths == 0)
+        Debug.Log(deaths);
+
+        if (deaths <= 1)
         {
             dialogueLines = noDeathLines;
         }
-        else if (deaths >= 1)
+        else if (deaths <= 9)
         {
             dialogueLines = oneDeathLines;
         }
-        else if (deaths >= 3 && deaths < 10)
+        else if (deaths <= 15)
         {
             dialogueLines = someDeathLines;
         }
