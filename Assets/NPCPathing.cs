@@ -61,10 +61,20 @@ public class NPCPathing : MonoBehaviour
                 myAgent.SetDestination(targetTransform.position);
 
                 if (!myAgent.pathPending && myAgent.remainingDistance <= arrivalThreshold)
-                {
-                    WaypointInfo info = targetTransform.GetComponent<WaypointInfo>();
-                    targetTransform = info != null ? info.nextTarget : null;
-                }
+                    {
+                        WaypointInfo info = targetTransform.GetComponent<WaypointInfo>();
+
+                        if (info is TeleportWaypointInfo teleporter)
+                        {
+                            // Teleport and get next target
+                            targetTransform = teleporter.HandleTeleport(transform);
+                        }
+                        else
+                        {
+                            targetTransform = info != null ? info.nextTarget : null;
+                        }
+                    }
+
             }
 
             yield return null;
