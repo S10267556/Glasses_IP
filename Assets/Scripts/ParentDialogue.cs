@@ -87,15 +87,15 @@ public class ParentDialogue : MonoBehaviour
     {
         Debug.Log(deaths);
 
-        if (deaths <= 1)
+        if (deaths < 1)
         {
             dialogueLines = noDeathLines;
         }
-        else if (deaths <= 9)
+        else if (deaths <= 5)
         {
             dialogueLines = oneDeathLines;
         }
-        else if (deaths <= 15)
+        else if (deaths <= 10)
         {
             dialogueLines = someDeathLines;
         }
@@ -114,6 +114,9 @@ public class ParentDialogue : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    /// <summary>
+    /// Updates the NPC's state and handles dialogue input.
+    /// </summary>
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && currentState == "dialogueLoad")
@@ -138,24 +141,28 @@ public class ParentDialogue : MonoBehaviour
             lookDirection.y = 0; // Only rotate on the Y axis
             if (lookDirection != Vector3.zero)
             {
-                Quaternion targetRot = Quaternion.LookRotation(lookDirection);
+                Quaternion targetRot = Quaternion.LookRotation(lookDirection); // Get the target rotation
                 myAgent.transform.rotation = Quaternion.Slerp(myAgent.transform.rotation, targetRot, Time.deltaTime * 5f); // Smoothly rotate
             }
         }
 
-        moveDirection = myAgent.velocity;
+        moveDirection = myAgent.velocity; // Get the current movement direction/speed
 
         //Animations
         if (moveDirection == Vector3.zero)
         {
             //Run Idle when not moving
-            animator.SetFloat("Speed", 0);
+            animator.SetFloat("Speed", 0); // Set speed to 0 when idle
         }
         else
         {
-            animator.SetFloat("Speed", 0.5f);
+            animator.SetFloat("Speed", 0.5f); // Set speed to 0.5 when moving
         }
     }
+
+    /// <summary>
+    /// Loads the dialogue for the NPC.
+    /// </summary>
 
     IEnumerator dialogueLoad()
     {
@@ -176,18 +183,21 @@ public class ParentDialogue : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Loads the next line of dialogue for the NPC.
+    /// </summary>
     void nextLine()
     {
-        if (index < dialogueLines.Length - 1)
+        if (index < dialogueLines.Length - 1) // Check if there is a next line
         {
-            index++;
+            index++; // Move to the next line
 
-            if (currentCoroutine != null)
+            if (currentCoroutine != null) // If a coroutine is already running
             {
                 StopCoroutine(currentCoroutine); // Stop the current coroutine if it's running
             }
 
-            StartCoroutine(switchStates("dialogueLoad"));
+            StartCoroutine(switchStates("dialogueLoad")); // Start the dialogueLoad coroutine
         }
         else
         {
@@ -199,6 +209,9 @@ public class ParentDialogue : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Loads the idle state for the NPC.
+    /// </summary>
     IEnumerator Idle()
     {
         while (currentState == "Idle")
@@ -219,6 +232,9 @@ public class ParentDialogue : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Loads the patrol state for the NPC.
+    /// </summary>
     IEnumerator Patrol()
     {
         while (currentState == "Patrol")
@@ -241,12 +257,15 @@ public class ParentDialogue : MonoBehaviour
                         currentPatrolPoint = 0; // Reset to the first patrol point if at the end of the array
                     }
                     StartCoroutine(switchStates("Idle")); //switch back to Idle state
-                    Debug.Log("Reached patrol point: " + patrolPoints[currentPatrolPoint]);
+                    Debug.Log("Reached patrol point: " + patrolPoints[currentPatrolPoint]); // Log the patrol point reached
                 }
             }
         }
     }
 
+    /// <summary>
+    /// Switches the NPC's state to a new state with given string.
+    /// </summary>
     IEnumerator switchStates(string newState)
     {
         if (currentState == newState)
@@ -277,6 +296,9 @@ public class ParentDialogue : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when another collider enters the trigger collider attached to the NPC.
+    /// </summary>
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -287,6 +309,9 @@ public class ParentDialogue : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when player collider exits the trigger collider attached to the NPC.
+    /// </summary>
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))

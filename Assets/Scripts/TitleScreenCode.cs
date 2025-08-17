@@ -9,12 +9,17 @@ using UnityEngine.SceneManagement;
 
 public class TitleScreenCode : MonoBehaviour
 {
+    /// <summary>
+    /// Loads the game scene.
+    /// </summary>
     public void LoadGameScene(string sceneName)
     {
         // Load the specified scene when the start button is pressed
         SceneManager.LoadScene(sceneName);
     }
-
+    /// <summary>
+    /// Quits the game.
+    /// </summary>
     public void QuitGame()
     {
         // Quit the application when the quit button is pressed

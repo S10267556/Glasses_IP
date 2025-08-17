@@ -16,6 +16,9 @@ public class SwitchScenes : MonoBehaviour
     [SerializeField]
     AudioClip doorSound; //sound to play when the player interacts with the door
 
+    [SerializeField]
+    float waitTime = 1f; // Time to wait before switching scenes
+
     /// <summary>
     /// Called when another collider enters the trigger collider attached to this object.
     /// </summary>
@@ -34,7 +37,7 @@ public class SwitchScenes : MonoBehaviour
     IEnumerator doorChangeScene()
     {
         AudioSource.PlayClipAtPoint(doorSound, transform.position);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(waitTime);
         SceneManager.LoadScene(targetScene); //load the scene with index 1 when the player enters the trigger collider
     }
 }
