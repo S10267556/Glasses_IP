@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Car
+  - PlayerVehicle
   layers:
   - Default
   - TransparentFX

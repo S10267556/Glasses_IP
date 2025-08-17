@@ -41,10 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8705919626359571824}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abd3d67d85d27214aa49f267192475a7, type: 3}
+  m_Script: {fileID: 11500000, guid: e13d5f024e11342489adabfbe3869fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextTarget: {fileID: 4776594896782413814}
+  nextTarget: {fileID: 0}
   teleportOnReach: 1
   teleportDestination: {fileID: 0}
-  spawnOffset: {x: 0, y: 0, z: 0}
+  spawnOffset: {x: 0, y: 0.2, z: 0}

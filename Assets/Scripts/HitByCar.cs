@@ -23,7 +23,7 @@ public class HitByCar : MonoBehaviour
     IEnumerator doorChangeScene()
     {
         AudioSource.PlayClipAtPoint(crashSound, transform.position);
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(targetScene); //load the scene with index 1 when the player enters the trigger collider
     }
 }

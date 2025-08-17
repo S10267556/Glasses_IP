@@ -25,5 +25,6 @@ AssetOrigin:
   productId: 246000
   packageName: Free General Ambience Sounds
   packageVersion: 1.0
-  assetPath: Assets/Gregor Quendel - Free General Ambience Sounds/Elevator ride.wav
+  assetPath: Assets/Packages/Gregor Quendel - Free General Ambience Sounds/Elevator
+    ride.wav
   uploadId: 560260
