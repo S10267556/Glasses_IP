@@ -5105,7 +5105,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 7da73cd44f01b284296b223cd8c1592a, type: 2}
 --- !u!4 &919184060
 Transform:
   m_ObjectHideFlags: 0
@@ -6091,7 +6091,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -13086,6 +13086,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1041490146}
   - {fileID: 994013238}
+  - {fileID: 919184060}
   - {fileID: 1901212624}
   - {fileID: 2016092276}
   - {fileID: 2040515366}
@@ -13093,7 +13094,6 @@ SceneRoots:
   - {fileID: 1952967120}
   - {fileID: 673379585}
   - {fileID: 2145901319}
-  - {fileID: 919184060}
   - {fileID: 1193110133}
   - {fileID: 1968050762}
   - {fileID: 567344812}
