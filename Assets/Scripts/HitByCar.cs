@@ -2,10 +2,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
+/*
+* Author: Wong Zhi Lin
+* Date: 17 August 2025
+* Description: This script handles the functionality when the player is hit by a car.
+*/
+
 public class HitByCar : MonoBehaviour
 {
     [SerializeField]
-    string targetScene;
+    string targetScene; // Level to load after the crash
 
     [SerializeField]
     AudioClip crashSound;

@@ -5,62 +5,71 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.AI;
 
+/*
+* Author: Wong Zhi Lin
+* Date: 17 August 2025
+* Description: This script handles the parent NPC's dialogue and interactions.
+*/
+
 public class ParentDialogue : MonoBehaviour
 {
 
-    NavMeshAgent myAgent;
+    NavMeshAgent myAgent; //gets the NavMeshAgent component for pathfinding
 
     [SerializeField]
-    GameObject dialogueObject;
+    GameObject dialogueObject; // The UI element that displays the dialogue text
 
     [SerializeField]
-    Transform targetTransform;
+    Transform targetTransform; // The target transform for the NPC to look at
 
     [SerializeField]
-    float targetRotation;
+    float targetRotation; // The target rotation for the NPC
 
     [SerializeField]
-    string currentState = "Idle";
+    string currentState = "Idle"; // The current state of the NPC
 
     [SerializeField]
-    GameObject[] patrolPoints;
+    GameObject[] patrolPoints; // The points the NPC will patrol between
 
-    int currentPatrolPoint = 0;
-
-    [SerializeField]
-    float idlePeriod = 2f;
-
-    public TextMeshProUGUI dialogueText;
+    int currentPatrolPoint = 0; // The index of the current patrol point
 
     [SerializeField]
-    string[] dialogueLines;
+    float idlePeriod = 2f; // The period the NPC will stay idle
+
+    public TextMeshProUGUI dialogueText; // The UI element that displays the dialogue text
 
     [SerializeField]
-    string[] noDeathLines;
+    string[] dialogueLines; // The lines of dialogue for the NPC
 
     [SerializeField]
-    string[] oneDeathLines;
+    string[] noDeathLines; // The lines of dialogue for the NPC when no deaths have occurred
 
     [SerializeField]
-    string[] someDeathLines;
+    string[] oneDeathLines; // The lines of dialogue for the NPC when one death has occurred
 
     [SerializeField]
-    string[] manyDeathLines;
+    string[] someDeathLines; // The lines of dialogue for the NPC when some deaths have occurred
 
     [SerializeField]
-    float textSpeed = 0.1f;
-
-    public static int deaths = 0;
-
-    private int index = 0;
-
-    private Coroutine currentCoroutine;
+    string[] manyDeathLines; // The lines of dialogue for the NPC when many deaths have occurred
 
     [SerializeField]
-    Vector3 moveDirection;
+    float textSpeed = 0.1f; // The speed at which the text is displayed
 
-    private Animator animator;
+    public static int deaths = 0; // The number of deaths that have occurred
 
+    private int index = 0; // The index of the current dialogue line
+
+    private Coroutine currentCoroutine; // The current coroutine for displaying dialogue
+
+    [SerializeField]
+    Vector3 moveDirection; // The direction the NPC is moving
+
+    private Animator animator; // The animator component for the NPC
+
+    /// <summary>
+    /// Agent is assigned when the script instance is being loaded.
+    /// </summary>
     void Awake()
     {
         myAgent = GetComponent<NavMeshAgent>();
@@ -71,6 +80,9 @@ public class ParentDialogue : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    /// <summary>
+    /// Called when a new scene is loaded. Assigns dialouge lines according to deaths.
+    /// </summary>
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log(deaths);
@@ -93,7 +105,9 @@ public class ParentDialogue : MonoBehaviour
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    /// <summary>
+    /// Starts coroutine and gets the animator component.
+    /// </summary>
     void Start()
     {
         StartCoroutine(currentState);
@@ -119,15 +133,15 @@ public class ParentDialogue : MonoBehaviour
         }
 
         if (currentState == "dialogueLoad" && targetTransform != null)
+        {
+            Vector3 lookDirection = targetTransform.position - myAgent.transform.position;
+            lookDirection.y = 0; // Only rotate on the Y axis
+            if (lookDirection != Vector3.zero)
             {
-                Vector3 lookDirection = targetTransform.position - myAgent.transform.position;
-                lookDirection.y = 0; // Only rotate on the Y axis
-                if (lookDirection != Vector3.zero)
-                    {
-                        Quaternion targetRot = Quaternion.LookRotation(lookDirection);
-                        myAgent.transform.rotation = Quaternion.Slerp(myAgent.transform.rotation, targetRot, Time.deltaTime * 5f); // Smoothly rotate
-                    }
+                Quaternion targetRot = Quaternion.LookRotation(lookDirection);
+                myAgent.transform.rotation = Quaternion.Slerp(myAgent.transform.rotation, targetRot, Time.deltaTime * 5f); // Smoothly rotate
             }
+        }
 
         moveDirection = myAgent.velocity;
 
@@ -150,11 +164,11 @@ public class ParentDialogue : MonoBehaviour
             myAgent.SetDestination(targetTransform.position + Vector3.forward * 2f);
             dialogueObject.SetActive(true); // Enable the dialogue object
             dialogueText.text = string.Empty; // Clear the text before showing the new line
-                foreach (char letter in dialogueLines[index].ToCharArray())
-                {
-                    dialogueText.text += letter;
-                    yield return new WaitForSeconds(textSpeed);
-                }
+            foreach (char letter in dialogueLines[index].ToCharArray())
+            {
+                dialogueText.text += letter;
+                yield return new WaitForSeconds(textSpeed);
+            }
         }
         else
         {
@@ -167,7 +181,7 @@ public class ParentDialogue : MonoBehaviour
         if (index < dialogueLines.Length - 1)
         {
             index++;
-            
+
             if (currentCoroutine != null)
             {
                 StopCoroutine(currentCoroutine); // Stop the current coroutine if it's running
@@ -280,7 +294,7 @@ public class ParentDialogue : MonoBehaviour
             //If the player exits the trigger, set targetTransform to null
             targetTransform = null;
         }
-    } 
+    }
 
     void OnDisable()
     {
