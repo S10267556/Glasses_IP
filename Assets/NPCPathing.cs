@@ -108,7 +108,10 @@ public class NPCPathing : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            targetTransform = other.transform;
+            targetTransform = null;
+            myAgent.isStopped = true;
+            stoppedForLight = true;
+            myAgent.velocity = Vector3.zero;
         }
     }
 
