@@ -1,8 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NPCTest : MonoBehaviour
+public class PedestrianWalk : MonoBehaviour
 {
     NavMeshAgent myAgent;
     Animator animator;
@@ -13,7 +13,7 @@ public class NPCTest : MonoBehaviour
     [Header("Roaming Settings")]
     [SerializeField] float roamRadius = 10f;     // How far NPC can roam
     [SerializeField] float roamWaitTime = 3f;    // How long NPC waits before picking a new point
-    [SerializeField] float idleChance = 0.4f;    // Chance to idle instead of moving (0–1)
+    [SerializeField] float idleChance = 0.4f;    // Chance to idle instead of moving (0�1)
 
     void Awake()
     {
@@ -56,7 +56,7 @@ public class NPCTest : MonoBehaviour
                 }
             }
 
-            // If player detected → stop roaming and look
+            // If player detected ? stop roaming and look
             if (targetTransform != null)
             {
                 StartCoroutine(SwitchState("LookAtPlayer"));
@@ -75,7 +75,7 @@ public class NPCTest : MonoBehaviour
         {
             if (targetTransform == null)
             {
-                // Player left trigger → back to roaming
+                // Player left trigger ? back to roaming
                 StartCoroutine(SwitchState("Roam"));
             }
             else
